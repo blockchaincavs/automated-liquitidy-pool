@@ -23,9 +23,12 @@ class AlpError extends Error {
 /**
  * Custom Errors
  */
-// class AuthenticationError extends AlpError {}
+class decryptError extends AlpError {}
+class JsonProviderError extends AlpError {}
 
 // common js export
 module.exports = {
-    AlpError
+    AlpError,
+    decryptError,
+    JsonProviderError
 }

@@ -4,9 +4,9 @@
  */
 
 const yargs = require("yargs");
-const { ethers, toUtf8Bytes} = require("ethers");
+const { Wallet, toUtf8Bytes} = require("ethers");
 const { readFile } = require('fs').promises;
-const { AlpError } = require('./errors.cjs')
+const { decryptError } = require('./errors.cjs')
 
 /**
  * Using yargs for command line arguments
@@ -30,22 +30,25 @@ const args = yargs
  * This function decripts the keystore file
  * @param {string} filePath json string
  * @param {string} password to unlock keystore
- * @returns {Promise<ethers.Wallet>} decrypted wallet
+ * @returns {Promise<Wallet>} decrypted wallet
  */
 async function decryptWallet(password, filePath) {
         
     try {
         const keystore = await readFile(filePath, 'utf8');
-        const decryptedWallet = await ethers.Wallet.fromEncryptedJson(keystore, toUtf8Bytes(password));
+        const decryptedWallet = await Wallet.fromEncryptedJson(keystore, toUtf8Bytes(password));
         console.log("Keystore wallet public key:", decryptedWallet.address)
         
         return decryptedWallet;
 
     } catch (error) {
         const path = error.path || filePath;
-        throw new AlpError("Failed to decrypt wallet from keystore file: " + path, error.code);
+        throw new decryptError("Failed to decrypt wallet from keystore file: " + path, error.code);
     }
     
 }
 
-module.exports = { args, decryptWallet };
+module.exports = { 
+    args, 
+    decryptWallet 
+};

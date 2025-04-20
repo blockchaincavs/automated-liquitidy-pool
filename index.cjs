@@ -34,7 +34,7 @@ async function main() {
         alp.run();
 
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         process.exit(0);
     }
 

@@ -1,5 +1,14 @@
 
-const { ethers, toUtf8Bytes} = require("ethers");
+const { 
+    Wallet,
+    Contract,
+    JsonRpcProvider, 
+    toUtf8Bytes
+} = require("ethers");
+
+const { CurrentConfig } = require('./config.cjs')
+
+const { JsonProviderError } = require('./errors.cjs');
 
 /**
  * @author blockchaincavs
@@ -10,11 +19,12 @@ class AutomatedLiquitidyPool {
 
     /**
      * @description
-     * @param { ethers.Wallet } wallet 
+     * @param { Wallet } wallet 
      */
     constructor(wallet) {
-        this.wallet = wallet;
-        console.log("Public Key:", this.wallet.address);
+
+        this.provider = new JsonRpcProvider(CurrentConfig.rpc.mainnet);
+        this.wallet = new Wallet(wallet.privateKey, this.provider);
     }
 
     /**
@@ -22,12 +32,30 @@ class AutomatedLiquitidyPool {
      * Periodically checks liquitidy positions for 'out of range'.
      * If no Liquitidy position exits, create it.
      */
+    async checkLiquidityPosition() {
+        
+        try {
+            const balance = await this.provider.getBalance(this.wallet.address);
+            console.log("ETH Balance:", balance.toString());
+        } catch (error) {
+            throw new JsonProviderError(error.shortMessage, error.code);
+        }
+    }
+
+    /**
+     * @description 
+     * Run app performing liquitidy position check at interval defined in CurrentConfig
+     */
     run() {
-        setInterval(() => {
-            // Code to be executed periodically
-            console.log("This message is logged every 5 seconds.");
-            // emit event??????
-        }, 5000);
+        setInterval(() => this.checkLiquidityPosition().catch( (reason) => {
+
+            // Handle reason for error
+            if (reason instanceof JsonProviderError) {
+                
+            }
+            console.log(reason.message);
+
+        }), CurrentConfig.interval);
     }
 }
 

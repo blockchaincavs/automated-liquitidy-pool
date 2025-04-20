@@ -10,6 +10,11 @@ Once the liquidity position goes "out of range" the pool is closed and a new one
 5. Once pool goes out of range, NFPM contract is closed.
 6. Assets are rebalanced by performing a swap to before creating a new liquitidy position.
 
+## env file
+The ALP application uses a JSON RPC node provider. RPC Urls should be listed in an environment variables in the .env file.
+- MAINNET_RPC_URL
+- BASE_RPC_URL
+  
 ## Usage
 To install all dependencies: `npm install`
 To install prod dependencies: `npm install --omit=dev`

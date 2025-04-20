@@ -1,7 +1,7 @@
 {
   "name": "alp",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project automates liquitdy providing using the Uniswap v3 SDK",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,6 +15,10 @@
     "nodemon": "^3.1.9"
   },
   "dependencies": {
+    "@uniswap/sdk-core": "^7.7.2",
+    "@uniswap/smart-order-router": "^4.20.10",
+    "@uniswap/v3-sdk": "^3.25.2",
+    "dotenv": "^16.4.7",
     "ethers": "^6.13.5",
     "yargs": "^17.7.2"
   }
